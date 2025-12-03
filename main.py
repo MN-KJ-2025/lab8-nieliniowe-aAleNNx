@@ -103,7 +103,27 @@ def bisection(
             - Liczba wykonanych iteracji.
         Jeżeli dane wejściowe są niepoprawne funkcja zwraca `None`.
     """
-    pass
+    if not isinstance(a,(int | float)) or not isinstance(epsilon, float) or not isinstance(max_iter, int):
+        return None
+    if f(a) == 0:
+        return (a, 0)
+    elif f(b) == 0:
+        return (b, 0)
+    elif f(a)*f(b) > 0:
+        print('warunek f(a)f(b) < 0 nie spelniony')
+        return None
+    else:
+        curr = (a+b)/2
+        for i in range(max_iter):
+            if abs(f(curr)) < epsilon:
+                return(curr, i+1)
+            if f(a)*f(curr) > 0:
+                a = curr
+            else:
+                b = curr
+            curr = (a+b)/2
+        return(curr, i)
+        
 
 
 def secant(
@@ -130,7 +150,22 @@ def secant(
             - Liczba wykonanych iteracji.
         Jeżeli dane wejściowe są niepoprawne funkcja zwraca `None`.
     """
-    pass
+    if f(a) == 0:
+        return (a, 0)
+    elif f(b) == 0:
+        return (b, 0)
+    elif f(a)*f(b) > 0:
+        print('warunek f(a)f(b) < 0 nie spelniony')
+        return None
+    for i in range(max_iters):
+        xn1 = (f(b)*a-f(a)*b)/(f(b)-f(a))
+        if abs(f(xn1)) < epsilon:
+            return(xn1, i+1)
+        if f(a)*f(xn1) > 0:
+            a = xn1
+        else:
+            b = xn1
+    return(xn1, i+1)
 
 
 def difference_quotient(
