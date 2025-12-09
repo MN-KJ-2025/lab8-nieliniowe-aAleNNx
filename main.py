@@ -185,7 +185,10 @@ def difference_quotient(
         (float): Wartość ilorazu różnicowego.
         Jeżeli dane wejściowe są niepoprawne funkcja zwraca `None`.
     """
-    pass
+    if not callable(f) or not isinstance(x, (int, float)) or not isinstance(x, (int, float)) or h == 0:
+        return None
+    return (f(x+h)-f(x))/h
+    
 
 
 def newton(
@@ -217,4 +220,44 @@ def newton(
             - Liczba wykonanych iteracji.
         Jeżeli dane wejściowe są niepoprawne funkcja zwraca `None`.
     """
-    pass
+    if not callable(f) or not callable(df) or not callable(ddf):
+        return None
+    if not isinstance(a, (int, float)):
+        return None
+    if not isinstance(b, (int, float)):
+        return None
+    if not isinstance(epsilon, (int, float)):
+        return None
+    if not isinstance(max_iter, int):
+        return None
+    if a >= b or epsilon <= 0 or max_iter <= 0:
+        return None
+    
+    if not isinstance(f(a), (int, float)) or not isinstance(f(b), (int, float)):
+        return None
+    if f(a) * f(b) > 0:
+        return None
+    
+    if f(a) * ddf(a) > 0:
+        x_curr = a
+    elif f(b) * ddf(b) > 0:
+        x_curr = b
+    else:
+        return None
+
+    for i in range(max_iter):
+        d_val = df(x_curr)
+
+        if d_val == 0:
+            return None
+
+        x_next = x_curr - f(x_curr) / d_val
+
+        if abs(x_next - x_curr) < epsilon:
+            return (x_next, i)
+        
+        x_curr = x_next
+
+    return (x_curr, max_iter)
+
+print(newton(func, dfunc, ddfunc, -0.5, 0.5, 1e-08, 50))
